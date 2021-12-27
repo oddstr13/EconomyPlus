@@ -1,5 +1,6 @@
 package me.itswagpvp.economyplus.commands;
 
+import me.itswagpvp.economyplus.EconomyPlus;
 import me.itswagpvp.economyplus.misc.Utils;
 import me.itswagpvp.economyplus.vault.Economy;
 import org.bukkit.Bukkit;
@@ -48,8 +49,8 @@ public class Eco implements CommandExecutor {
 
                 if (p.getPlayer() != null)  {
                     p.getPlayer().sendMessage(plugin.getMessage("Money.Refreshed")
-                            .replaceAll("%money_formatted%", "" + utility.fixMoney(Double.parseDouble(args[2])))
-                            .replaceAll("%money%", "" + utility.format(Double.parseDouble(args[2]))));
+                            .replaceAll("%money_formatted%", "" + utility.fixMoney(value))
+                            .replaceAll("%money%", "" + utility.format(value)));
 
                     Utils.playSuccessSound(p.getPlayer());
                 }
@@ -66,22 +67,16 @@ public class Eco implements CommandExecutor {
                     return true;
                 }
 
-                double res = money.getBalance() - value;
+                double balance = EconomyPlus.veco.getBalance(p);
+                EconomyPlus.veco.withdrawPlayer(p, Double.min(balance, value));
 
-                if (res < 0D) {
-                    res = 0D;
-                    Economy eco = new Economy(p, 0D);
-                    eco.setBalance();
-                } else {
-                    money.takeBalance();
-                }
+                balance = EconomyPlus.veco.getBalance(p);
 
                 sender.sendMessage(plugin.getMessage("Money.Done"));
 
                 if (p.getPlayer() != null) {
                     p.getPlayer().sendMessage(plugin.getMessage("Money.Refreshed")
-                            .replaceAll("%money%", "" + utility.format(res))
-                            .replaceAll("%money_formatted%", "" + utility.fixMoney(res)));
+                            .replaceAll("%money%", "" + utility.fixMoney(balance)));
                     Utils.playSuccessSound(p.getPlayer());
                 }
 
@@ -97,14 +92,14 @@ public class Eco implements CommandExecutor {
                     return true;
                 }
 
-                money.addBalance();
+                EconomyPlus.veco.depositPlayer(p, value);
 
                 sender.sendMessage(plugin.getMessage("Money.Done"));
 
                 if (p.getPlayer() != null) {
                     p.getPlayer().sendMessage(plugin.getMessage("Money.Refreshed")
-                            .replaceAll("%money_formatted%", "" + utility.fixMoney(money.getBalance()))
-                            .replaceAll("%money%", "" + utility.format(money.getBalance())));
+                            .replaceAll("%money_formatted%", "" + utility.fixMoney(value))
+                            .replaceAll("%money%", "" + utility.format(value)));
                     Utils.playSuccessSound(p.getPlayer());
                 }
 

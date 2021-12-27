@@ -1,8 +1,10 @@
 package me.itswagpvp.economyplus.commands;
 
+import me.itswagpvp.economyplus.EconomyPlus;
 import me.itswagpvp.economyplus.misc.StorageManager;
 import me.itswagpvp.economyplus.misc.Utils;
-import me.itswagpvp.economyplus.vault.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -71,20 +73,22 @@ public class Pay implements CommandExecutor {
             return true;
         }
 
-        Economy selfEco = new Economy(p, money);
-
-        if (!selfEco.detractable()) {
+        if (!EconomyPlus.veco.has(p, money)) {
             p.sendMessage(plugin.getMessage("Pay.NoMoney"));
             Utils.playErrorSound(p);
             return true;
         }
 
-        Economy otherEco = new Economy(target, money);
-
         Utils utilities = new Utils();
 
-        selfEco.takeBalance();
-        otherEco.addBalance();
+        EconomyResponse resp = EconomyPlus.veco.withdrawPlayer(p, money);
+        if (resp.transactionSuccess()) {
+            EconomyPlus.veco.depositPlayer(target, resp.amount);
+        } else {
+            p.sendMessage(plugin.getMessage("Pay.NoMoney"));
+            Utils.playErrorSound(p);
+            return true;
+        }
 
         Utils.playSuccessSound(p);
         Utils.playSuccessSound(target);

@@ -7,11 +7,7 @@ import org.bukkit.plugin.ServicePriority;
 import static me.itswagpvp.economyplus.EconomyPlus.plugin;
 
 public class VHook {
-
-    public Economy veco;
-
     public void onHook() {
-        veco = new VEconomy(plugin);
         plugin.getServer().getServicesManager().register(Economy.class, EconomyPlus.veco, plugin, ServicePriority.Highest);
     }
 

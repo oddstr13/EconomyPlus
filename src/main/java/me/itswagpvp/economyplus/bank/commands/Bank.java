@@ -1,5 +1,6 @@
 package me.itswagpvp.economyplus.bank.commands;
 
+import me.itswagpvp.economyplus.EconomyPlus;
 import me.itswagpvp.economyplus.misc.Utils;
 import me.itswagpvp.economyplus.vault.Economy;
 import org.bukkit.Bukkit;
@@ -45,7 +46,7 @@ public class Bank implements CommandExecutor {
         if (args.length == 2) {
 
             double amount = Double.parseDouble(args[1]);
-            double balance = new Economy(p, 0).getBalance();
+            double balance = EconomyPlus.veco.getBalance(p);
             double bank = new Economy(p, 0).getBank();
 
             if (args[0].equalsIgnoreCase("withdraw")) {
@@ -61,9 +62,9 @@ public class Bank implements CommandExecutor {
                     return true;
                 }
 
-                Economy eco = new Economy(p, amount);
-                eco.addBalance();
+                EconomyPlus.veco.depositPlayer(p, amount);
 
+                Economy eco = new Economy(p, amount);
                 double value = eco.getBank();
 
                 Economy econ = new Economy(p, (value - amount));
@@ -88,9 +89,9 @@ public class Bank implements CommandExecutor {
                     return true;
                 }
 
-                Economy eco = new Economy(p, amount);
-                eco.takeBalance();
+                EconomyPlus.veco.withdrawPlayer(p, amount);
 
+                Economy eco = new Economy(p, amount);
                 double value = eco.getBank();
 
                 Economy econ = new Economy(p, (amount + value));

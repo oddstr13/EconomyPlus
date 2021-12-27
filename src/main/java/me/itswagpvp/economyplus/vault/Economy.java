@@ -16,9 +16,13 @@ public class Economy extends VEconomy {
         this.money = money;
     }
 
-    // Returns the money of a player
+    /**
+     * @deprecated use EconomyPlus.veco.getBalance(player)
+     * @return player account balance
+     */
+    @Deprecated
     public double getBalance() {
-        return super.getBalance(new Selector().playerToString(player));
+        return getBalance(player);
     }
 
     // Set the money of a player
@@ -28,13 +32,21 @@ public class Economy extends VEconomy {
     }
 
     // Add moneys to a player account
+    /**
+     * @deprecated use EconomyPlus.veco.depositPlayer(player, amount)
+     */
+    @Deprecated
     public void addBalance() {
-        super.depositPlayer(new Selector().playerToString(player), money);
+        super.depositPlayer(player, money);
     }
 
     // Remove moneys from a player's account
+    /**
+     * @deprecated use EconomyPlus.veco.withdrawPlayer(player, amount)
+     */
+    @Deprecated
     public void takeBalance() {
-        super.withdrawPlayer(new Selector().playerToString(player), money);
+        super.withdrawPlayer(player, money);
     }
 
     // Set player's bank to the constructor value
@@ -49,6 +61,10 @@ public class Economy extends VEconomy {
     }
 
     // Controls if the player has enough moneys
+    /**
+     * @deprecated use EconomyPlus.veco.has(player, amount)
+     */
+    @Deprecated
     public boolean detractable() {
         return has(player, money);
     }
